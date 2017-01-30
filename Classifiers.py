@@ -1,5 +1,6 @@
 from imblearn.over_sampling import SMOTE
 import numpy as np
+import seaborn #I imported seaborn because beauty, but it's obviously optional :}
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -76,7 +77,7 @@ class Classifiers(object):
         fig.set_size_inches(15, 10)
         fig.savefig('ROC_curves_no_newssites.png', dpi=100)
 
-    def plot_profit(self, cb):
+    def plot_profit(self, cb): #How do you determine your cost-benefit matrix?
         fig, ax = plt.subplots()
         percentages = np.linspace(0, 100, len(self._y_test) + 1)
         for name, clf in zip(self.classifier_names, self.classifiers):
