@@ -6,11 +6,13 @@ import re
 from nltk.tag import pos_tag
 from textblob import TextBlob
 
+#TextBlob is so cool!!!!!!!
+
 ME = ['Bahrain','Cyprus','Egypt','Iran','Iraq','Israel','Jordan','Kuwait',\
     'Lebanon','Oman','Qatar','Palestine','Palestinian territories', 'Saudi Arabia','Syria','Turkey','United Arab Emirates','Yemen']
 
 class StyleFeatures(dict):
-
+    
     def find_freq(self,lst, search_item, normalizer):
         return lst.count(search_item) / len(normalizer)
 
