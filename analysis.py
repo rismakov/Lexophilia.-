@@ -34,6 +34,15 @@ from sklearn.svm import SVC
 
 # HOW DO I SORT ABOVE???
 
+#It might make sense to break this code up into multiple documents
+#Maybe having one for plotting, one for processing the data, one for NLP processing and analysis,
+#one for the nodes/graph stuff, and then a run.py doc to run all the things you want to do,
+#maybe even a separate run.py doc for each set of actions you want to take.
+#Then you can just import your functions from each .py file and it'll be encapsulated
+#and look real nice :}
+#This analysis code is super impressive, great job!!
+#Doc strings for the functins would be helpful
+
 def print_gender_stats(df,female_df, male_df, feature):
     print '________________{}______________'.format(feature)
     print 'mean: {:.3f} +- {:.3f}'.format(df[feature].mean(),df[feature].std()/np.sqrt(len(df)))
@@ -361,7 +370,8 @@ def run_all_classifiers(data):
     X.drop('newssite_slate',axis=1,inplace=True)
     X['constant'] = 1
 
-    gender_model = Classifiers([AdaBoostClassifier(),RandomForestClassifier(),DecisionTreeClassifier(), GradientBoostingClassifier(),LogisticRegression()])
+    gender_model = Classifiers([AdaBoostClassifier(),RandomForestClassifier(),DecisionTreeClassifier(),\
+                                GradientBoostingClassifier(),LogisticRegression()])
     gender_model.train(X,y)
     #gender_model.cross_validate(X,y)
     gender_model.plot_roc_curve()
