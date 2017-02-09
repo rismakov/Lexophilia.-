@@ -8,8 +8,10 @@ class StyleFeatures(dict):
     def find_freq(self,lst, search_item, normalizer):
         return lst.count(search_item) / len(normalizer)
 
-    def __init__(self,article):
+    def find_freq_per_thousand(self,lst, search_item, normalizer):
+        return (lst.count(search_item) / len(normalizer)) * 1000
 
+    def __init__(self,article):
         article= TextBlob(article)
         words = [word.singularize() for word in article.words]
         sentences = article.sentences
@@ -21,22 +23,32 @@ class StyleFeatures(dict):
         sentence_lens = [len(sentence.split()) for sentence in sentences]
         punct = [char for char in article if char in punctuation]
 
-        self['article_len'] = len(words)
-        if self['article_len'] != 0:
-            self['type_token_ratio'] = len(set(words)) / self['article_len']
-            self['mean_word_len'] = np.mean(word_lens)
-            self['mean_sentence_len'] = np.mean(sentence_lens)
-            self['std_sentence_len'] = np.std(sentence_lens)
+        freq_items = {
+                        'freq_question_marks':[punct,'?',sentences],\
+                        'freq_exclamation_marks':[punct,'!',sentences],\
+                        'freq_quotation_marks':[punct,'?',sentences]
+                     }
 
-            self['freq_commas'] = self.find_freq(punct, ',', words) * 1000
-            self['freq_semi_colons'] = self.find_freq(punct, ';', words) * 1000
-            self['freq_question_marks'] = self.find_freq(punct, '?', sentences)
-            self['freq_exclamation_marks'] = self.find_freq(punct, '!', sentences)
-            self['freq_quotation_marks'] = self.find_freq(punct, '"', sentences)
-            self['freq_ands'] = self.find_freq(words, 'and', words) * 1000
-            self['freq_buts'] = self.find_freq(words, 'but', words) * 1000
-            self['freq_howevers'] = self.find_freq(words, 'however', words) * 1000
-            self['freq_ifs'] = self.find_freq(words, 'if', words) * 1000
-            self['freq_thats'] = self.find_freq(words, 'that', words) * 1000
-            self['freq_mores'] = self.find_freq(words, 'more', words) * 1000
-            self['freq_verys'] = self.find_freq(words, 'very', words) * 1000
+        freq_items_per_thousand = {
+                                'freq_commas':[punct,',',words], \
+                                'freq_semi_colons':[punct,';',words],\
+                                'freq_ands': [words, 'and', words],\
+                                'freq_buts': [words, 'but', words],\
+                                'freq_howevers': [words, 'however', words],\
+                                'freq_ifs': [words, 'if', words],\
+                                'freq_thats': [words, 'that', words],\
+                                'freq_mores': [words, 'more', words],\
+                                'freq_verys': [words, 'very', words]
+                                }
+
+        for item,params in freq_items.iteritems():
+            self[item] = self.find_freq(params[0],params[1],params[2])
+
+        for item,params in freq_items_per_thousand.iteritems():
+            self[item] = self.find_freq_per_thousand(params[0],params[1],params[2])
+
+        self['article_len'] = len(words)
+        self['type_token_ratio'] = len(set(words)) / self['article_len']
+        self['mean_word_len'] = np.mean(word_lens)
+        self['mean_sentence_len'] = np.mean(sentence_lens)
+        self['std_sentence_len'] = np.std(sentence_lens)

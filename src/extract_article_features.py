@@ -21,6 +21,9 @@ def remove_words(string, words):
     return string
 
 def convert_dates_to_dt(dates,date_format):
+
+    ok_formats = ['%B %d %Y', '%b %d, %Y', '%d %b %Y', '%Y-%m-%d']
+
     dates_formatted = []
     for date in dates:
         if date.split()[0] == 'Sept.':
@@ -28,7 +31,7 @@ def convert_dates_to_dt(dates,date_format):
         elif date.split()[0] == 'Updated:':
             date = ' '.join(date.split()[1:4])
 
-        if date_format == '%B %d %Y' or date_format=='%b %d, %Y' or date_format== '%d %b %Y' or '.' in date.split()[0]:
+        if date_format in ok_formats or '.' in date.split()[0]:
             frmt = date_format
         elif ',' in date.split()[1]:
             frmt = '%B %d, %Y'
@@ -77,9 +80,15 @@ def create_and_save_feature_df(df,date_format,newssite):
 if __name__ == "__main__":
     
     nyt_data = pd.read_json('data/nyt_data.json')
+    nyt_data['date_posted'] = [date[:10] for date in nyt_data.date_posted]
+    nyt_data = nyt_data[nyt_data.article != ''] 
 
-    import pdb; pdb.set_trace()
-    create_and_save_feature_df(time_op_data, '%b %d, %Y','time_opinion')
+    #nyt = nyt_data[nyt_data.section != 'Opinion']
+    nyt_op = nyt_data[nyt_data.section == 'Opinion']
+    nyt_op = nyt_op.reset_index()
+    nyt_op.drop('index',axis=1,inplace=True)
+    #create_and_save_feature_df(nyt, '%Y-%m-%d','nyt')
+    create_and_save_feature_df(nyt_op, '%Y-%m-%d','nyt_op')
 
     '''
     time_op_data = pd.read_json('data/time_opinion_data.json')

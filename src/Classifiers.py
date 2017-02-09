@@ -9,7 +9,7 @@ from sklearn.metrics import recall_score, precision_score, f1_score, accuracy_sc
 from itertools import izip
 from sklearn.model_selection import GridSearchCV, cross_val_score
 from scipy.stats import hmean
-from plotting import plot_clf_scores
+from Plotting import plot_clf_scores
 import cPickle
 
 class Classifiers(object):

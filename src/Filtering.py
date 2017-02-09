@@ -64,4 +64,5 @@ def group_by_author(df, print_gender_info = False):
 def seperate_by_gender(df):
     return df[df.author_gender == 'female'], df[df.author_gender == 'male']
 
-
+    
+        

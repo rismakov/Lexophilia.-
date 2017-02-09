@@ -8,7 +8,7 @@ from itertools import izip
 from Filtering import filter_data, filter_out_unknowns, \
                         group_by_month,group_by_author,seperate_by_gender
 from Counting import add_title_countries_to_df, get_sorted_top_countries
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime
 import seaborn as sns
@@ -22,7 +22,8 @@ YLABELS = {'article_len':'Article Length', 'polarity': 'Polarity',\
                     'subjectivity':'Subjectivity','type_token_ratio':'Type Token Ratio', \
                     'mean_sentence_len': 'Mean Sentence Length', 'mean_word_len':'Mean Word Length', \
                     'std_sentence_len': 'Std of Sentence Length', 'freq_exclamation_marks': "Frequency of '!'",\
-                    'freq_question_marks': "Frequency of '?'", 'freq_ids':"Frequency of 'if's"}
+                    'freq_question_marks': "Frequency of '?'", 'freq_ids':"Frequency of 'if's",\
+                    'freq_verys': "Frequency of 'very'"}
 
 def print_gender_stats(df,female_df, male_df, feature):
     print '________________{}______________'.format(feature)
@@ -77,7 +78,7 @@ def plot_feature_vs_date(media_data,media_names,filename,colors):
                 data_grouped_by_month = group_by_month(newssite_data)
 
                 plt.plot(data_grouped_by_month.index, data_grouped_by_month[feature], 'o-',color=color)
-                
+
                 means.append(newssite_data[feature].mean())
                 errs.append(newssite_data[feature].std() / np.sqrt(len(newssite_data)))
             label_fig_xaxis_date(feature,media_names)
@@ -104,7 +105,7 @@ def plot_top_countries_for_each_newssite(media_data,media_sites):
     colors = {'Israel': 'c', 'Iran': 'cadetblue', 'Russia':'salmon','Syria':'indianred', \
                 'Georgia':'burlywood', 'India':'y','Iraq':'slategrey' ,'Cuba':'darkseagreen',\
                 'China':'tan', 'Ukraine':'teal','North Korea':'lightcoral', 'Niger':'lightgray',\
-                'Malaysia':'burntyellow', 'Mexico':'darkolivegreen'}
+                'Malaysia':'burnt yellow', 'Mexico':'darkolivegreen'}
     n=len(media_data)/2; #number of subplots in row
     m=2 #number of subplots in column
 
@@ -177,9 +178,9 @@ def plot_gender_by_newssite(media_data,media_names):
 
     plt.ylabel('Percentage')
     label_fig_xaxis_names(media_names,width=width/2)
-    plt.legend((p1[0], p2[0], p3[0]), ('Men', 'Women', 'Unknown'))
+    plt.legend((p1[0], p2[0], p3[0]), ('Men', 'Women', 'Unknown'), loc="best")
     plt.tight_layout()
-    plt.savefig('gender_percentages.jpg',facecolor='whitesmoke')
+    plt.savefig('gender_percentages.jpg')
     plt.close()
 
 def print_top_words_of_all_articles(articles):
@@ -193,8 +194,10 @@ def print_top_words_of_all_articles(articles):
     print Counter(stop_words_in_article).most_common(15)
 
 def plot_clf_scores(scores,names,plot_name):
-    plt.bar(xrange(len(scores)),scores)
-    label_fig_xaxis_names(names)
+    plt.bar(xrange(len(scores)),scores,width=0.35)
+    x_range = np.arange(len(names))
+    plt.xticks(x_range, names, rotation='vertical')
+    plt.xlim([x_range.min()-0.5,x_range.max()+0.5])
     plt.ylabel('Mean F1 Score')
     plt.tight_layout()
     plt.style.use('fivethirtyeight')
