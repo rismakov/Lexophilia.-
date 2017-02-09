@@ -5,11 +5,15 @@ The stylometry of written language and the implicit features of a text are able 
 
 ## Methods
 
+![Flowchart](/images/flowchart.png)
+
 ### Engineered Features
 Type token ratio • Mean word length • Mean sentence length • Standard deviation of sentence length • Frequency of commas • Frequency of semicolons • Frequency of exclaimation marks • Frequency of question marks • Polarity • Subjectivity • etc ...
 
 ### Differences between Newssites
 I compiled data from several different newssites, which included the ones visualized below. To compare, I took the articles of each from within the last two years and compared writing style within that timeframe. As noticable, there were many clear features that differed strongly between them. Complied from last two years: Slate dataset: 145 authors BuzzFeed dataset: 144 authors TIME dataset: 1231 authors TIME_opinion dataset: 556 authors Atlantic dataset: 1647 authors
+
+![Media logos](/images/sites.png)
 
 ### Differences between Genders
 Strong differences were visible when exploring the data. These were all included in the predictive model. 
