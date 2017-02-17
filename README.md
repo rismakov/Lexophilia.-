@@ -32,8 +32,8 @@ Using Ada Boost, I was able to achieve a higher mean F1 score than both of my ba
 
 ## Web App
 
-You can read about the results to greater degree at: rismakov.com 
+You can read about the results to greater degree at: www.rismakov.com 
 
-Also can play around with the interactive web app that predicts your gender and outputs information on your text: rismakov.com/app 
+Also can play around with the interactive web app that predicts your gender and outputs information on your text: www.rismakov.com/app 
 
 
