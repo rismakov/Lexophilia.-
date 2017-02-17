@@ -12,6 +12,10 @@ The stylometry of written language and the implicit features of a text are able 
 ### Engineered Features
 Type token ratio • Mean word length • Mean sentence length • Standard deviation of sentence length • Frequency of commas • Frequency of semicolons • Frequency of exclaimation marks • Frequency of question marks • Polarity • Subjectivity • etc ...
 
+You can look through the source code title "stylometry_analysis.py" for more detailed information on how these features were extracted from the text. Most were counting frequencies of certain tokens.
+
+Polarity and subjectivty scores were performed through sentiment analysis using Python's TextBlob module. TextBlob extracts thses scores through a library that evaluates each word's polarity and subjectivity and then outputs an average score for each article. The library has a database of words with associated polarity scores ranging from -1 (most negative) to +1 (most positive), with 0 as neutral; similarly, subjectivity scores for each word range from 0 (low subjecivity) to 1 (high subjectivity).
+
 ### Differences between Newssites
 I compiled data from several different newssites, which included the ones visualized below. To compare, I took the articles of each from within the last two years and compared writing style within that timeframe. As noticable, there were many clear features that differed strongly between them. Complied from last two years: Slate dataset: 145 authors BuzzFeed dataset: 144 authors TIME dataset: 1231 authors TIME_opinion dataset: 556 authors Atlantic dataset: 1647 authors
 
