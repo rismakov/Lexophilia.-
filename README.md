@@ -1,5 +1,7 @@
 # Lexophilia 
 
+![Cover](/images/cover.png)
+
 ## Motivation
 The stylometry of written language and the implicit features of a text are able to expose information about the writer to greater detail than purely topic and words used alone. Given this, I examined whether the style of writing is enough to predict the gender of an author. I webscraped articles from multiple different media sites to get a broad source of articles. The articles were all taken from the Political and World sections to examine writing within one topic and prevent potential topic modeling.
 
@@ -21,6 +23,8 @@ Strong differences were visible when exploring the data. These were all included
 ## Results
 
 Using Ada Boost, I was able to achieve a higher mean F1 score than both of my baseline models (majority baseline, which predicted the majority class, and a weighed random baseline). This shows that gender is able to be extrapolated from the stylometry of political articles.  
+
+![Tools](/images/tools.png)
 
 ## Web App
 
