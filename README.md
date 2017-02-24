@@ -7,7 +7,7 @@ The stylometry of written language and the implicit features of a text are able 
 
 ## Methods
 
-![Flowchart](/images/flowchart.png)
+<img src="/images/flowchart.png" height=70% width=70%>
 
 ### Engineered Features
 Type token ratio • Mean word length • Mean sentence length • Standard deviation of sentence length • Frequency of commas • Frequency of semicolons • Frequency of exclaimation marks • Frequency of question marks • Polarity • Subjectivity • etc ...
@@ -19,7 +19,8 @@ Polarity and subjectivty scores were performed through sentiment analysis using 
 ### Differences between Newssites
 I compiled data from several different newssites, which included the ones visualized below. To compare, I took the articles of each from within the last two years and compared writing style within that timeframe. As noticable, there were many clear features that differed strongly between them. Complied from last two years: Slate dataset: 145 authors BuzzFeed dataset: 144 authors TIME dataset: 1231 authors TIME_opinion dataset: 556 authors Atlantic dataset: 1647 authors
 
-![Media logos](/images/sites.png)
+
+<img src="/images/sites.png" height=70% width=70% align="center">
 
 ### Differences between Genders
 Strong differences were visible when exploring the data. These were all included in the predictive model. 
@@ -28,7 +29,12 @@ Strong differences were visible when exploring the data. These were all included
 
 Using Ada Boost, I was able to achieve a higher mean F1 score than both of my baseline models (majority baseline, which predicted the majority class, and a weighed random baseline). This shows that gender is able to be extrapolated from the stylometry of political articles.  
 
-![Tools](/images/tools.png)
+<img src="/images/tools.png" height=70% width=70%>
+
+## Future Goals
+
+<img src="/images/future-steps.png" height=70% width=70%>
+
 
 ## Web App
 
