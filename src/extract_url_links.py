@@ -4,40 +4,44 @@ import pickle
 import requests
 from bs4 import BeautifulSoup
 
+
 def convert_unicode_to_str(unicode):
-    return unicodedata.normalize('NFKD', unicode).encode('ascii','ignore')
+    return unicodedata.normalize('NFKD', unicode).encode('ascii', 'ignore')
+
 
 def get_reuters_urls_from_url_bases(urls):
-    all_urls=[]
+    all_urls = []
     for url in urls:
         if url[:44] == 'http://www.reuters.com/investigates/section/':
-            inner_urls = get_list_of_all_urls(url, 'section-article row col-md-11 col-md-offset-1 col-lg-9 col-lg-offset-1','',xrange(1))
+            inner_urls = get_list_of_all_urls(url, 'section-article row col-md-11 col-md-offset-1 col-lg-9 col-lg-offset-1', '', xrange(1))
             for inner_url in inner_urls:
                 all_urls.append(inner_url)
         else:
             all_urls.append(url)
     return all_urls
 
-def get_list_of_vox_urls(url_base,page_nums,urls=[]):
 
-    for i in page_nums: #goes through pages
+def get_list_of_vox_urls(url_base, page_nums, urls=[]):
+
+    for i in page_nums:  # goes through pages
         url = url_base.format(i+1)
         r = requests.get(url)
         soup = BeautifulSoup(r.text, 'html.parser')
 
         code_sections = soup.find_all('h3')
 
-        for code in code_sections: #goes through each link
+        for code in code_sections:  # goes through each link
             url = convert_unicode_to_str(code.a['href'])
             urls.append(url)
 
-        save_urls_to_pickle('time_urls',urls)
+        save_urls_to_pickle('time_urls', urls)
 
     return urls
 
-def get_list_of_all_urls(url_base, klass, klass2, page_nums,urls=[]):
 
-    for i in page_nums: #goes through pages
+def get_list_of_all_urls(url_base, klass, klass2, page_nums, urls=[]):
+
+    for i in page_nums:  # goes through pages
         print i
         url = url_base.format(i+1)
         r = requests.get(url)
@@ -45,9 +49,9 @@ def get_list_of_all_urls(url_base, klass, klass2, page_nums,urls=[]):
 
         code_sections = soup.find_all(class_=klass)
         if klass2:
-            code_sections = code_sections[1].find_all(class_=klass2) # was [1] before, [0] for slate
+            code_sections = code_sections[1].find_all(class_=klass2)  # was [1] before, [0] for slate
 
-        for code in code_sections: #goes through each link
+        for code in code_sections:  # goes through each link
             try:
                 url = convert_unicode_to_str(code.a['href'])
                 urls.append(url)
@@ -58,9 +62,11 @@ def get_list_of_all_urls(url_base, klass, klass2, page_nums,urls=[]):
 
     return urls
 
+
 def save_urls_to_pickle(file_name, urls):
     with open(file_name, 'wb') as fp:
         pickle.dump(urls, fp)
+
 
 def open_urls(file_name):
     with open(file_name, 'rb') as outfile:
@@ -97,12 +103,13 @@ if __name__ == "__main__":
     '''
 
     # time world
-    #time_url_base = 'http://time.com/world/page/{0}/'
+    # time_url_base = 'http://time.com/world/page/{0}/'
     time_url_base = 'http://time.com/opinion/page/{}/'
     time_klass = 'section-archive-list'
     time_klass2 = 'section-article-title'
-    #time_urls = open_urls('time_urls')
-    time_urls = get_list_of_all_urls(time_url_base,time_klass,time_klass2,xrange(139),[])
+    # time_urls = open_urls('time_urls')
+    time_urls = get_list_of_all_urls(time_url_base, time_klass, time_klass2,
+                                     xrange(139), [])
     save_urls_to_pickle('time_opinion_urls', time_urls)
     print 'retrieved all {0} Time url links'.format(len(time_urls))
 

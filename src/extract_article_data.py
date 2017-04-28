@@ -6,22 +6,26 @@ from string import punctuation
 import json
 import pickle
 
+
 def convert_unicode_to_str(unicode):
-    return unicodedata.normalize('NFKD', unicode).encode('ascii','ignore')
+    return unicodedata.normalize('NFKD', unicode).encode('ascii', 'ignore')
 
 with open('text_files/female_names.txt') as f:
     female_names = set(f.read().splitlines())
 with open('text_files/male_names.txt') as f:
     male_names = set(f.read().splitlines())
 
+
 def ignore_words(string, words):
     for word in words:
-        string = string.replace(word,'')
+        string = string.replace(word, '')
     return string
 
+
 def get_soup(url):
-    r=requests.get(url)
+    r = requests.get(url)
     return BeautifulSoup(r.text, 'html.parser')
+
 
 def get_author_gender(name):
     if name in female_names:
@@ -30,40 +34,43 @@ def get_author_gender(name):
         return 'male'
     return 'unknown'
 
+
 def get_h1_title(code_section):
     return code_section.h1.text
 
-def get_date(code_section,klass):
+
+def get_date(code_section, klass):
     return code_section.find_all(class_=klass)[0].text
 
-def get_author_name(code_section,klass):
+
+def get_author_name(code_section, klass):
     return code_section.find_all(class_='byline')[0].text
 
-def get_unfiltered_code(code_section,klass):
+
+def get_unfiltered_code(code_section, klass):
     return code_section.find_all(class_=klass)
 
-def get_breitbart_datapoint_info(urls,filename,datapoints=[]):
 
-    ind = urls.index('http://www.breitbart.com/big-government/2013/10/12/obamacare-technical-problems-worsen/')
-    #ind = 5001
+def get_breitbart_datapoint_info(urls, filename, datapoints=[]):
+    ind = 0
 
     for i, url in enumerate(urls[ind:]):
         print url
         if url[:25] == 'http://www.breitbart.com/':
-            if url[25:29] != 'live' and url[25:29] != 'tech' and url[25:30] != 'video' \
-                    and url[25:30] != 'sport' and url[25:30] != 'big-h' and url[25:30] != 'big-j':
+            if url[25:29] != 'live' and url[25:29] != 'tech' and url[25:30] != 'video'\
+                  and url[25:30] != 'sport' and url[25:30] != 'big-h' and url[25:30] != 'big-j':
                 print i
 
                 datapoint = {}
                 soup = get_soup(url)
-                code_section =  soup.article
+                code_section = soup.article
 
                 datapoint['title'] = get_h1_title(code_section)
-                datapoint['date_posted'] = convert_unicode_to_str(get_date(code_section,'bydate'))
-                author_name = get_author_name(code_section,'byauthor')
+                datapoint['date_posted'] = convert_unicode_to_str(get_date(code_section, 'bydate'))
+                author_name = get_author_name(code_section, 'byauthor')
                 datapoint['author'] = ' '.join(author_name.split()[1:])
                 datapoint['author_gender'] = get_author_gender(author_name.split()[0])
-                code_text = get_unfiltered_code(code_section,'entry-content')
+                code_text = get_unfiltered_code(code_section, 'entry-content')
 
                 code_text = code_text[0].text
                 code_text = convert_unicode_to_str(code_text)
@@ -76,9 +83,10 @@ def get_breitbart_datapoint_info(urls,filename,datapoints=[]):
 
     return datapoints
 
-def get_reuters_datapoint_info(urls,filename,datapoints):
 
-    for i,url in enumerate(urls):
+def get_reuters_datapoint_info(urls, filename, datapoints):
+
+    for i, url in enumerate(urls):
 
         if url[:18] == 'http://www.reuters':
             print i
@@ -86,7 +94,7 @@ def get_reuters_datapoint_info(urls,filename,datapoints):
 
             datapoint = {}
             soup = get_soup(url)
-            code_section =  soup.article
+            code_section = soup.article
 
             try:
 
@@ -95,13 +103,13 @@ def get_reuters_datapoint_info(urls,filename,datapoints):
                 except:
                     datapoint['title'] = code_section.h2.text
 
-                datapoint['date_posted'] = convert_unicode_to_str(get_date(code_section,'time')) #timestamp
-                author_name = get_author_name(code_section,'byline') #author
+                datapoint['date_posted'] = convert_unicode_to_str(get_date(code_section, 'time'))  # timestamp
+                author_name = get_author_name(code_section, 'byline')  # author
                 datapoint['author'] = author_name[1:]
                 datapoint['author_gender'] = get_author_gender(author_name.split()[0])
-                code_text = get_unfiltered_code(code_section,'row col-md-9 col-md-offset-1 article-body-content') #article-text
+                code_text = get_unfiltered_code(code_section, 'row col-md-9 col-md-offset-1 article-body-content') #article-text
 
-                #if code_text:
+                # if code_text:
                 code_text = code_text[0].text
                 code_text = convert_unicode_to_str(code_text)
 
@@ -116,28 +124,28 @@ def get_reuters_datapoint_info(urls,filename,datapoints):
 
     return datapoints
 
+
 def get_time_op_datapoint_info(urls, filename, datapoints=[]):
 
     ind = urls.index('http://time.com/90954/mothers-day-parenting-skills/')
-    #ind=0
+    # ind=0
 
-    for i,url in enumerate(urls[ind +1:]):
-        print i
-        print url
+    for i, url in enumerate(urls[ind+1:]):
+        print i, url
 
         datapoint = {}
         soup = get_soup(url)
 
         code_section = soup
         datapoint['title'] = soup.h1.text
-        datapoint['date_posted'] = code_section.find_all('span', attrs={'class':'MblGHNMJ'})[0].text
+        datapoint['date_posted'] = code_section.find_all('span', attrs={'class': 'MblGHNMJ'})[0].text
         author_name = code_section.find_all(class_='zhtAwgU0')[0].text
         datapoint['author'] = author_name
         datapoint['author_gender'] = get_author_gender(author_name.split()[0])
 
-        code_text = get_unfiltered_code(code_section,'column small-12 medium-10 medium-offset-1 large-offset-2  _10M0Ygc4')
+        code_text = get_unfiltered_code(code_section, 'column small-12 medium-10 medium-offset-1 large-offset-2  _10M0Ygc4')
 
-        article=''
+        article = ''
         for code in code_text:
             article += code.text
 
@@ -152,27 +160,27 @@ def get_time_op_datapoint_info(urls, filename, datapoints=[]):
 
     return datapoints
 
+
 def get_timemag_datapoint_info(urls, filename, datapoints=[]):
 
-    #ind = urls.index('http://time.com/2819856/princess-letizia-spain-photos/')
-    ind=0
+    # ind = urls.index('http://time.com/2819856/princess-letizia-spain-photos/')
+    ind = 0
 
-    for i,url in enumerate(urls[ind:]):
+    for i, url in enumerate(urls[ind:]):
         print i
         print url
 
         datapoint = {}
         soup = get_soup(url)
-        code_section =  soup.article
-
+        code_section = soup.article
 
         datapoint['title'] = get_h1_title(code_section)
-        datapoint['date_posted'] = convert_unicode_to_str(get_date(code_section,'publish-date'))
-        author_name = get_author_name(code_section,'byline')
+        datapoint['date_posted'] = convert_unicode_to_str(get_date(code_section, 'publish-date'))
+        author_name = get_author_name(code_section, 'byline')
         datapoint['author'] = author_name
         datapoint['author_gender'] = get_author_gender(author_name.split()[0])
 
-        code_text = get_unfiltered_code(code_section,'article-body')
+        code_text = get_unfiltered_code(code_section, 'article-body')
 
         code_text = code_text[0].text
         code_text = convert_unicode_to_str(code_text)
@@ -184,6 +192,7 @@ def get_timemag_datapoint_info(urls, filename, datapoints=[]):
         save_to_json(filename, datapoints)
 
     return datapoints
+
 
 def get_atlantic_datapoint_info(urls,filename,datapoints=[]):
 
@@ -220,28 +229,29 @@ def get_atlantic_datapoint_info(urls,filename,datapoints=[]):
 
     return datapoints
 
+
 def get_slate_datapoint_info(urls,file_name,datapoints):
 
     ind = urls.index('http://www.slate.com/articles/news_and_politics/politics/2007/07/bushs_latest_lame_libby_excuse.html')
 
-    for i,url in enumerate(urls[ind+1:]):
+    for i, url in enumerate(urls[ind+1:]):
         if url[:29] == 'http://www.slate.com/articles':
             print i
             print url
 
             datapoint = {}
             soup = get_soup(url)
-            code_section =  soup.find_all('article', class_='main')[0]
+            code_section = soup.find_all('article', class_='main')[0]
 
             datapoint['title'] = get_h1_title(code_section)
-            datapoint['date_posted'] = convert_unicode_to_str(get_date(code_section,'pub-date'))
+            datapoint['date_posted'] = convert_unicode_to_str(get_date(code_section, 'pub-date'))
 
             try:
-                author_name = code_section.find_all('a',rel='author')[0].text
+                author_name = code_section.find_all('a', rel='author')[0].text
                 datapoint['author'] = author_name
 
                 datapoint['author_gender'] = get_author_gender(author_name.split()[0])
-                code_text = get_unfiltered_code(code_section,'newbody body parsys')
+                code_text = get_unfiltered_code(code_section, 'newbody body parsys')
 
                 if code_text:
                     code_text = code_text[0].text
@@ -259,6 +269,7 @@ def get_slate_datapoint_info(urls,file_name,datapoints):
                 pass
 
     return datapoints
+
 
 def get_bf_datapoint_info(urls,filename,datapoints):
     klass = 'c bf_dom'
@@ -310,9 +321,11 @@ def get_bf_datapoint_info(urls,filename,datapoints):
 
     return datapoints
 
+
 def save_to_json(filename, datapoints):
     with open(filename, 'w') as outfile:
         json.dump(datapoints, outfile)
+
 
 def extract_and_save_data(name,scrape_func,urls,datapoints=[]):
     print 'retrieved all {0} url links'.format(len(urls))
@@ -321,9 +334,11 @@ def extract_and_save_data(name,scrape_func,urls,datapoints=[]):
     save_to_json(name, datapoints)
     print 'retrieved all code'
 
+
 def open_urls(file_name):
     with open(file_name, 'rb') as outfile:
         return pickle.load(outfile)
+
 
 def open_json_file(filename):
     json_data = open(filename).read()
@@ -333,7 +348,7 @@ if __name__ == '__main__':
 
     breitbart_urls = open_urls('breitbart_urls')
     datapoints= open_json_file('data/breitbart_data.json')
-    #datapoints=[]
+    # datapoints=[]
     print 'retrieved {} datapoints'.format(len(datapoints))
     extract_and_save_data('data/breitbart_data2.json',get_breitbart_datapoint_info,breitbart_urls,datapoints)
 

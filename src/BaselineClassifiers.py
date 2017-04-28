@@ -1,17 +1,18 @@
 from random import random
 import numpy as np
 
+
 class BaselineClassifier(object):
 
-    def __init__(self,percentage=None,length=None):
+    def __init__(self, percentage=None, length=None):
         self._percentage = percentage
-        self._len = length 
+        self._len = length
 
-    def fit(self,X,y):
+    def fit(self, X, y):
         self._percentage = len([y==1])/len(y)
 
     def predict(self, X):
-        predictions=[]
+        predictions = []
         for i in xrange(self._len):
             rand = random()
 
@@ -22,12 +23,14 @@ class BaselineClassifier(object):
 
         return np.array(predictions)
 
-class MajorityClassifier(object):
-    def __init__(self,majority=None,length=None):
-        self._majority = majority
-        self._len = length 
 
-    def fit(self,X,y):
+class MajorityClassifier(object):
+
+    def __init__(self, majority=None, length=None):
+        self._majority = majority
+        self._len = length
+
+    def fit(self, X, y):
         if len(y==1) > len(y==0):
             self._majority = 1
         else:
@@ -36,14 +39,16 @@ class MajorityClassifier(object):
     def predict(self, X):
         return np.ones(self._len * self._majority)
 
+
 class SmartBaseline(object):
-    def __init__(self,male_percentage_by_year):
+
+    def __init__(self, male_percentage_by_year):
         self._prob = male_percentage_by_year
 
     def predict(self, X):
-        predictions=[]
-        for i,yr in enumerate(X['year']):
-            probability_male= self._prob[yr]
+        predictions = []
+        for i, yr in enumerate(X['year']):
+            probability_male = self._prob[yr]
             rand = random()
 
             if rand <= probability_male:
