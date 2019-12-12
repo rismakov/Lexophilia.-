@@ -1,9 +1,9 @@
-import nltk
-from nltk.corpus import stopwords
-from sklearn.feature_extraction.text import TfidfVectorizer
-from scipy import sparse
-import seaborn as sns
 import cPickle
+import nltk
+
+from nltk.corpus import stopwords
+from scipy import sparse
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 def get_words(inds, tfidf):

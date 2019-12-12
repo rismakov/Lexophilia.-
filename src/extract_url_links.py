@@ -1,7 +1,9 @@
 from __future__ import division
-import unicodedata
+
 import pickle
 import requests
+import unicodedata
+
 from bs4 import BeautifulSoup
 
 

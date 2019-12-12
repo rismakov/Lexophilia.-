@@ -1,6 +1,7 @@
-import pandas as pd
-from stylometry_analysis import StyleFeatures
 import cPickle
+import pandas as pd
+
+from stylometry_analysis import StyleFeatures
 
 
 def open_cPickle_file(filename):

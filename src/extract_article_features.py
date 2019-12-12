@@ -1,8 +1,12 @@
 from __future__ import division
-import pandas as pd
-from stylometry_analysis import StyleFeatures
+
 import json
+import pandas as pd
+
 from datetime import datetime
+
+from stylometry_analysis import StyleFeatures
+
 
 NONARTICLE_WORDS = ['270', '480', 'tsgp', 'experienceID', 'api', 'setsize',
                     'containing', 'ID:', 'Getty', 'Images', 'iframe',

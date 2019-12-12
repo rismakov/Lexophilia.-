@@ -1,10 +1,12 @@
 from __future__ import division
-import requests
-import unicodedata
-from bs4 import BeautifulSoup
-from string import punctuation
+
 import json
 import pickle
+import requests
+import unicodedata
+
+from bs4 import BeautifulSoup
+from string import punctuation
 
 
 def convert_unicode_to_str(unicode):

@@ -1,6 +1,8 @@
 from __future__ import division
-from string import punctuation
+
 import numpy as np
+
+from string import punctuation
 from textblob import TextBlob
 
 

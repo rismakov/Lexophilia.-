@@ -1,17 +1,27 @@
 from __future__ import division
-from imblearn.over_sampling import SMOTE
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import StratifiedShuffleSplit
-from sklearn.metrics import recall_score, precision_score, f1_score, \
-                            accuracy_score, confusion_matrix, roc_curve, auc
-from itertools import izip
-from sklearn.model_selection import GridSearchCV, cross_val_score
-from scipy.stats import hmean
-from Plotting import plot_clf_scores
+
 import cPickle
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+from imblearn.over_sampling import SMOTE
+from itertools import izip
+from scipy.stats import hmean
+from sklearn.model_selection import (
+    cross_val_score, GridSearchCV, StratifiedShuffleSplit, train_test_split
+)
+from sklearn.metrics import (
+    accuracy_score,
+    auc,
+    confusion_matrix,
+    f1_score,
+    precision_score
+    recall_score,
+    roc_curve, 
+)
+
+from Plotting import plot_clf_scores
 
 
 class Classifiers(object):

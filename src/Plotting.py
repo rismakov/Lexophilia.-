@@ -1,21 +1,25 @@
 from __future__ import division
+
+import numpy as np
 import scipy
+
+import matplotlib.cm as cm
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from collections import Counter
+from itertools import izip
+from nltk.corpus import stopwords
+from string import punctuation
+
 from bokeh.models.widgets import Panel, Tabs
 from bokeh.io import output_file, show
 from bokeh.plotting import figure
 from bokeh.charts import Bar
-from itertools import izip
+
 import Filtering
 import Countries
-import matplotlib.pyplot as plt
-import numpy as np
-from datetime import datetime
-import seaborn as sns
-import matplotlib.cm as cm
-from itertools import izip
-from nltk.corpus import stopwords
-from string import punctuation
-from collections import Counter
+
 
 YLABELS = {'article_len': 'Article Length', 'polarity': 'Polarity',
            'subjectivity': 'Subjectivity',

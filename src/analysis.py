@@ -1,38 +1,47 @@
 from __future__ import division
+
+import cPickle
+import json
+import matplotlib.cm as cm
 import numpy as np
 import pandas as pd
-from sklearn.cluster import KMeans
-from sklearn.feature_extraction.text import TfidfVectorizer
-from stop_words import get_stop_words
-from itertools import izip
-from string import punctuation
-from stylometry_analysis import StyleFeatures
-import json
-from datetime import datetime
 import time
-from collections import defaultdict, Counter
-from itertools import izip
-from Classifiers import Classifiers
+
+from scipy.stats import hmean
+
+from sklearn.cluster import KMeans
+from sklearn.ensemble import (
+    AdaBoostClassifier, RandomForestClassifier, GradientBoostingClassifier
+)
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier,\
-                             GradientBoostingClassifier
-from sklearn.tree import DecisionTreeClassifier
-from scipy.stats import mode
-from sklearn.svm import SVC
+from sklearn.metrics import (
+    accuracy_score,
+    auc,
+    confusion_matrix,
+    f1_score,
+    recall_score,
+    roc_curve,
+    precision_score,
+)
 from sklearn.model_selection import GridSearchCV
 from sklearn.naive_bayes import MultinomialNB
-from BaselineClassifiers import BaselineClassifier, MajorityClassifier,\
-                                SmartBaseline
-import Plotting
-from BaselineClassifiers import BaselineClassifier, MajorityClassifier
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+
+from stop_words import get_stop_words
+
 import Filtering
-from vectorizer_and_kmeans_clf import vectorize_articles,\
-                                      add_meta_data_to_tfidf_mat
-import cPickle
-from sklearn.metrics import recall_score, precision_score, f1_score,\
-                            accuracy_score, confusion_matrix, roc_curve, auc
-from scipy.stats import hmean
-import matplotlib.cm as cm
+import Plotting
+
+from BaselineClassifiers import (
+    BaselineClassifier, MajorityClassifier, SmartBaseline
+)
+from Classifiers import Classifiers
+from stylometry_analysis import StyleFeatures
+from vectorizer_and_kmeans_clf import (
+    add_meta_data_to_tfidf_mat, vectorize_articles
+)
 
 with open('text_files/female_names.txt') as f:
     FEMALE_NAMES = set(f.read().splitlines())

@@ -1,9 +1,12 @@
 from __future__ import division
-import requests
-from bs4 import BeautifulSoup
-from string import punctuation
+
 import json
 import pickle
+import requests
+
+from bs4 import BeautifulSoup
+from string import punctuation
+
 
 TYPE = ['Article', 'Blog', 'News', 'An Analysis; News Analysis', 'Text']
 SECTIONS = ['World', 'Opinion', 'Blogs', 'U.S.']
