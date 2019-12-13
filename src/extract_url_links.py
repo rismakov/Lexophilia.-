@@ -1,10 +1,15 @@
 from __future__ import division
 
+import logging
 import pickle
 import requests
 import unicodedata
 
 from bs4 import BeautifulSoup
+
+from news_site_html_info import NEWSITE_HTML_INFO
+
+logging.getLogger().setLevel(logging.INFO)
 
 
 def convert_unicode_to_str(unicode):
@@ -23,8 +28,7 @@ def get_reuters_urls_from_url_bases(urls):
     return all_urls
 
 
-def get_list_of_vox_urls(url_base, page_nums, urls=[]):
-
+def get_vox_urls(url_base, page_nums, urls=[]):
     for i in page_nums:  # goes through pages
         url = url_base.format(i+1)
         r = requests.get(url)
@@ -42,10 +46,9 @@ def get_list_of_vox_urls(url_base, page_nums, urls=[]):
 
 
 def get_list_of_all_urls(url_base, klass, klass2, page_nums, urls=[]):
-
-    for i in page_nums:  # goes through pages
-        print i
-        url = url_base.format(i+1)
+    for i in page_nums:  # iterates through pages
+        logging.info('Page number: {}'.format(i))
+        url = url_base.format(i)
         r = requests.get(url)
         soup = BeautifulSoup(r.text, 'html.parser')
 
@@ -58,9 +61,8 @@ def get_list_of_all_urls(url_base, klass, klass2, page_nums, urls=[]):
                 url = convert_unicode_to_str(code.a['href'])
                 urls.append(url)
             except:
+                logging.info('Error occurred at url {}'.format(url))
                 pass
-
-        save_urls_to_pickle('time_opinion_urls',urls)
 
     return urls
 
@@ -74,48 +76,30 @@ def open_urls(file_name):
     with open(file_name, 'rb') as outfile:
         return pickle.load(outfile)
 
+
 if __name__ == "__main__":
-    '''
-    breitbart_url_base = 'http://www.breitbart.com/big-government/page/{}/'
-    klass = 'title'
-    breitbart_urls = get_list_of_all_urls(breitbart_url_base,klass,'',xrange(2489))
-    save_urls_to_pickle('urls/breitbart_urls', breitbarts_urls)
-    print 'retrieved all {0} Breitbart Post url links'.format(len(breitbart_urls))
-    '''
-    '''
-    huff_url_base = 'http://www.huffingtonpost.com/section/politics?page={}'
-    klass = 'card__link'
-    huff_urls = get_list_of_all_urls(huff_url_base,klass,'',xrange(15))
-    save_urls_to_pickle('huff_urls', huff_urls)
-    print 'retrieved all {0} Huffington Post url links'.format(len(huff_urls))
+    for newssite, info in NEWSITE_HTML_INFO.items():
+        logging.info('Extracting url links from {}'.format(newssite))
 
+        urls = get_list_of_all_urls(
+            url_base=info['base_url'], 
+            klass=info['klass'],
+            klass2=info.get('klass2', ''),
+            page_nums=range(1, info['page_nums']),
+        )
 
+        # save_urls_to_pickle('../{}_urls'.format(), urls)
+
+        logging.info(
+            'Retrieved {} {} post url links'.format(len(urls), newsite)
+        )
+    
+    '''
     vox_url_base = 'http://www.vox.com/world/archives/{}'
-    vox_urls = get_list_of_vox_urls(vox_url_base,xrange(1))
+    vox_urls = get_vox_urls(vox_url_base,range(1))
     save_urls_to_pickle('vox_urls', vox_urls)
     print 'retrieved all {0} Buzzfeed url links'.format(len(bf_urls))
-    '''
-    '''
-    # buzzfeed
-    buzzfeed_url_base = 'https://www.buzzfeed.com/politics?p={0}&z=5AIR6U&r=1'
-    bf_klass = 'lede__title lede__title--medium'
-    bf_urls = get_list_of_all_urls(buzzfeed_url_base,bf_klass,'',xrange(599))
-    save_urls_to_pickle('buzzfeed_urls', bf_urls)
-    print 'retrieved all {0} Buzzfeed url links'.format(len(bf_urls))
-    '''
 
-    # time world
-    # time_url_base = 'http://time.com/world/page/{0}/'
-    time_url_base = 'http://time.com/opinion/page/{}/'
-    time_klass = 'section-archive-list'
-    time_klass2 = 'section-article-title'
-    # time_urls = open_urls('time_urls')
-    time_urls = get_list_of_all_urls(time_url_base, time_klass, time_klass2,
-                                     xrange(139), [])
-    save_urls_to_pickle('time_opinion_urls', time_urls)
-    print 'retrieved all {0} Time url links'.format(len(time_urls))
-
-    '''
     # reuters investigates- special reports
     reuters_url_base = 'http://www.reuters.com/investigates/section/reuters-investigates-201{}/'
     reuters_klass = 'item'
@@ -125,19 +109,9 @@ if __name__ == "__main__":
     save_urls_to_pickle('urls/reuters_full_urls', reuters_all_urls)
     print 'retrieved all {0} Reuters url links'.format(len(reuters_all_urls))
 
-    #the atlantic news
-    atlantic_base_url = 'https://www.theatlantic.com/latest/?page={}'
-    atlantic_klass = 'article blog-article '
-    atlantic_urls = get_list_of_all_urls(atlantic_base_url, atlantic_klass, '', xrange(8673))
-    save_urls_to_pickle('atlantic_urls', atlantic_urls)
-    print 'retrieved all {0} Atlantic url links'.format(len(atlantic_urls))
-
     # slate politics and international news: 149, Feb 2001
-    slate_url_base = 'http://www.slate.com/articles/news_and_politics/politics.{0}.html'
-    slate_klass = 'tiles'
-    slate_klass2 = 'tile long-hed stacked'
-    slate_urls = get_list_of_all_urls(slate_url_base,slate_klass,slate_klass2,xrange(60))
-    slate_urls2 = get_list_of_all_urls(slate_url_base,'tiles','tile basic',xrange(60,150))
+    slate_urls = get_list_of_all_urls(slate_url_base,slate_klass,slate_klass2,range(60))
+    slate_urls2 = get_list_of_all_urls(slate_url_base,'tiles','tile basic',range(60,150))
 
     all_slate_urls = slate_urls + slate_urls2
 
